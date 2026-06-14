@@ -1,0 +1,46 @@
+{
+  "researcher": {
+    "model_fast": "qwen2.5-coder:1.5b",
+    "model_deep": "qwen2.5-coder:7b",
+    "num_ctx": 8192,
+    "temperature": 0.3
+  },
+  "writer": {
+    "model_fast": "qwen2.5-coder:1.5b",
+    "model_deep": "llama3.2:3b",
+    "model": "llama3.2:3b",
+    "num_ctx": 8192,
+    "temperature": 0.5,
+    "max_tokens": 4096
+  },
+  "truth_loop": {
+    "model_fast": "qwen2.5-coder:1.5b",
+    "model_deep": "qwen2.5-coder:7b",
+    "model": "qwen2.5-coder:7b",
+    "max_cycles_fast": 0,
+    "max_cycles_deep": 3,
+    "max_cycles": 3,
+    "temperature": 0.3
+  },
+  "image_collector": {
+    "max_images_per_entity": 3,
+    "delay_between_searches": 10.0,
+    "safe_search": "off"
+  },
+  "paths": {
+    "articles_dir": "articles",
+    "exports_dir": "exports",
+    "images_dir": "images",
+    "prompts_dir": "prompts",
+    "research_dir": "research"
+  },
+  "ollama": {
+    "base_url": "http://localhost:11434",
+    "request_timeout": 300
+  },
+  "web_ui": {
+    "host": "127.0.0.1",
+    "port": 5000,
+    "debug": false
+  }
+}
