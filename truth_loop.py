@@ -2,6 +2,7 @@ import json
 import os
 import requests
 import time
+from pathlib import Path
 
 
 def _call_ollama(messages, model, temperature=0.3, max_tokens=4096, timeout=None):
@@ -68,13 +69,19 @@ def audit_article(article_text, topic, mode="fast"):
         "final_critique": ""
     }
 
+    prompts_dir = Path(__file__).parent / "prompts"
+    judge_prompt_path = prompts_dir / "judge_impartial.txt"
+    judge_prompt = judge_prompt_path.read_text(encoding="utf-8") if judge_prompt_path.exists() else (
+        "You are a fact-checking editor and investigative auditor."
+    )
+
     for cycle in range(max_cycles):
         print(f"[{cycle + 1}/{max_cycles}] Running truth audit...")
 
         messages = [
             {
                 "role": "system",
-                "content": "You are a fact-checking editor and investigative auditor."
+                "content": judge_prompt
             },
             {
                 "role": "user",

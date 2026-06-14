@@ -17,9 +17,9 @@
   "truth_loop": {
     "model_fast": "qwen2.5-coder:1.5b",
     "model_deep": "qwen2.5-coder:1.5b",
-    "max_cycles_fast": 0,
-    "max_cycles_deep": 0,
-    "max_cycles": 0,
+    "max_cycles_fast": 1,
+    "max_cycles_deep": 1,
+    "max_cycles": 1,
     "temperature": 0.3
   },
   "image_collector": {
