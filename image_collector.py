@@ -79,13 +79,17 @@ def collect_images(article_text, research_entities, article_slug, topic=""):
             print(f"  Search failed for '{query}': {e}")
             continue
 
+        skip_keywords = ["logo", "icon", "wallpaper", "printable", "calendar", "vector"]
         downloaded = 0
         for result in results:
             if downloaded >= max_per_entity:
                 break
 
             image_url = result.get("image")
+            title = (result.get("title") or "").lower()
             if not image_url or image_url in seen_urls:
+                continue
+            if any(k in title for k in skip_keywords):
                 continue
             seen_urls.add(image_url)
 
