@@ -114,11 +114,46 @@ a {{ color: #1a73e8; }}
     except Exception as e:
         print(f"  [SKIP] PDF — conversion failed: {e}")
 
+    mindmap_path = exports_dir / f"{slug}_mindmap.html"
+    sections = [s.strip() for s in full_text.split("**") if s.strip() and len(s.strip()) > 10]
+    nodes = [s for s in sections if not s.startswith("!") and not s.startswith("-")]
+    mindmap_html = f"""<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="utf-8"><title>{topic} - Mindmap</title>
+<style>body{{margin:0;font-family:sans-serif;background:#1a1a2e;color:#e0e0e0;}}
+#map{{width:100vw;height:100vh;}}
+.node circle{{fill:#00d4aa;stroke:#00a080;stroke-width:2px;}}
+.node text{{fill:#e0e0e0;font-size:12px;}}
+.link{{stroke:#555;stroke-width:1.5px;}}</style>
+</head>
+<body><svg id="map"></svg>
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script>
+var data={{name:"{topic[:50]}",children:[
+{''.join(f'{{name:"{n[:60].replace(chr(34),"'")}"}},' for n in nodes[:15])}
+]}};
+var w=window.innerWidth,h=window.innerHeight;
+var tree=d3.tree().size([h-100,w-200]);
+var root=tree(d3.hierarchy(data));
+var svg=d3.select("#map"),g=svg.append("g").attr("transform","translate(100,50)");
+svg.attr("width",w).attr("height",h);
+g.selectAll(".link").data(root.links()).enter().append("path").attr("class","link")
+ .attr("d",d3.linkHorizontal().x(d=>d.y).y(d=>d.x));
+var node=g.selectAll(".node").data(root.descendants()).enter().append("g")
+ .attr("class","node").attr("transform",d=>`translate(${{d.y}},${{d.x}})`);
+node.append("circle").attr("r",6);
+node.append("text").attr("dy",-10).attr("x",d=>d.children?-10:10).attr("text-anchor",d=>d.children?"end":"start")
+ .text(d=>d.data.name.slice(0,40));
+</script></body></html>"""
+    mindmap_path.write_text(mindmap_html, encoding="utf-8")
+    print(f"  [SAVED] Mindmap: {mindmap_path}")
+
     result = {
         "markdown": str(md_path),
         "html": str(html_path),
         "docx": str(docx_path),
         "pdf": str(pdf_path) if pdf_path else None,
+        "mindmap": str(mindmap_path),
     }
 
     print()

@@ -137,7 +137,6 @@ def audit_article(article_text, topic, mode="fast"):
         revised = improved
         audit_report["cycles_run"] = cycle + 1
 
-    audit_report["final_critique"] = audit_report["final_critique"] or critique
     return revised, audit_report
 
 

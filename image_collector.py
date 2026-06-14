@@ -71,7 +71,10 @@ def collect_images(article_text, research_entities, article_slug, topic=""):
     seen_urls = set()
 
     for i, entity in enumerate(entities):
-        query = entity if not topic else f"{topic} {entity}"
+        query = entity
+        if topic:
+            short_topic = topic[:60]
+            query = f"{short_topic} {entity}"
         print(f"[{i + 1}/{len(entities)}] Searching images for: {query}")
         try:
             results = _search_images(query, max_results=max_per_entity * 2)
